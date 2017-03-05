@@ -23,12 +23,14 @@ odkomentujdete a upravte enabled = true a bind-address = ":8083"
 ### Grafana
 
 * rpi
+
     ```
 	wget "https://github.com/fg2it/grafana-on-raspberry/releases/download/v4.1.2/grafana_4.1.2-1487023783_armhf.deb"
 	sudo dpkg -i grafana_4.1.2-1487023783_armhf.deb
     sudo apt-get install -f
     ```
 * x86-64
+
     ````
 	sudo apt-get install -y apt-transport-https
 	curl -sL https://packagecloud.io/gpg.key | sudo apt-key add -
