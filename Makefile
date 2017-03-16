@@ -1,5 +1,9 @@
 SDK_DIR ?= sdk
 
+override PIXEL_COUNT ?= 50
+
+CFLAGS += -D'PIXEL_COUNT=$(PIXEL_COUNT)'
+
 -include sdk/Makefile.mk
 
 .PHONY: all
