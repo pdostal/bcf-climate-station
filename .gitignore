@@ -1,5 +1,6 @@
 /obj/
 /out/
+/out_release/
 .gitmodules
 base/obj/
 base/out/

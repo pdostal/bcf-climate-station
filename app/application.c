@@ -1,15 +1,17 @@
 #include <application.h>
 #include <bcl.h>
 
-#define PIXELS_COUNT 142
+#ifndef PIXEL_COUNT
+#define PIXEL_COUNT 142
+#endif
 #define PREFIX_TALK "weather-station"
 
-static uint32_t _dma_buffer[PIXELS_COUNT * 4 * 2];
+static uint32_t _dma_buffer[PIXEL_COUNT * 4 * 2];
 
 static bc_led_strip_buffer_t led_strip_buffer =
 {
     .type = BC_LED_STRIP_TYPE_RGBW,
-    .count = PIXELS_COUNT,
+    .count = PIXEL_COUNT,
     .buffer = _dma_buffer
 };
 
@@ -152,11 +154,11 @@ static void thermometer(float temperature)
 {
     temperature -= -20;
 
-    int max_i = PIXELS_COUNT * temperature / (50 + 20);
+    int max_i = PIXEL_COUNT * temperature / (50 + 20);
 
-    if (max_i > PIXELS_COUNT)
+    if (max_i > PIXEL_COUNT)
     {
-        max_i = PIXELS_COUNT;
+        max_i = PIXEL_COUNT;
     }
 
     if (max_i < 0)
@@ -177,11 +179,11 @@ static void thermometer(float temperature)
 
     for (int i = 0; i < max_i; i++)
     {
-        get_heat_map_color((float)i / PIXELS_COUNT, &red, &green, &blue);
+        get_heat_map_color((float)i / PIXEL_COUNT, &red, &green, &blue);
 
         bc_led_strip_set_pixel_rgbw(&led_strip, i, brightness * red, brightness * green, brightness * blue, 0);
     }
-    for (int i = max_i; i < PIXELS_COUNT; i++)
+    for (int i = max_i; i < PIXEL_COUNT; i++)
     {
         bc_led_strip_set_pixel_rgbw(&led_strip, i, 0, 0, 0, white);
     }
