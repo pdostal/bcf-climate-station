@@ -27,10 +27,11 @@ void usb_talk_publish_lux_meter(const char *prefix, uint8_t *i2c, float *illumin
 void usb_talk_publish_barometer(const char *prefix, uint8_t *i2c, float *pascal, float *altitude);
 void usb_talk_publish_light(const char *prefix, bool *state);
 void usb_talk_publish_relay(const char *prefix, bool *state);
+void usb_talk_publish_led(const char *prefix, bool *state);
 void usb_talk_publish_led_strip_config(const char *prefix, const char *sufix, const char *mode, int *count);
 
 bool usb_talk_is_string_token_equal(const char *buffer, jsmntok_t *token, const char *string);
-bool usb_talk_payload_get_bool(usb_talk_payload_t *payload, const char *key, bool *value);
+bool usb_talk_payload_get_bool(usb_talk_payload_t *payload, bool *value);
 bool usb_talk_payload_get_data(usb_talk_payload_t *payload, const char *key, uint8_t *buffer, size_t *length);
 bool usb_talk_payload_get_enum(usb_talk_payload_t *payload, const char *key, int *value, ...);
 bool usb_talk_payload_get_uint(usb_talk_payload_t *payload, const char *key, int *value);

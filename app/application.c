@@ -2,9 +2,9 @@
 #include <bcl.h>
 
 #ifndef PIXEL_COUNT
-#define PIXEL_COUNT 142
+#define PIXEL_COUNT 72
 #endif
-#define PREFIX_TALK "weather-station"
+#define PREFIX_TALK "climate-station"
 
 static uint32_t _dma_buffer[PIXEL_COUNT * 4 * 2];
 
@@ -20,15 +20,22 @@ static bc_tick_t last_public_0_48 = 0;
 static bc_tick_t last_public_0_49 = 0;
 static float illuminance = 5000;
 static bool is_module_climate = false;
+static bc_led_t led;
+static bool led_state = false;
 
 static void temperature_tag_event_handler(bc_tag_temperature_t *self, bc_tag_temperature_event_t event, void *event_param);
 static void thermometer(float temperature);
 static void get_heat_map_color(float value, float *red, float *green, float *blue);
-static void relay_set(usb_talk_payload_t *payload);
-static void relay_get(usb_talk_payload_t *payload);
+static void relay_state_set(usb_talk_payload_t *payload);
+static void relay_state_get(usb_talk_payload_t *payload);
+static void led_state_set(usb_talk_payload_t *payload);
+static void led_state_get(usb_talk_payload_t *payload);
 
 void application_init(void)
 {
+    bc_led_init(&led, BC_GPIO_LED, false, false);
+    bc_led_set_mode(&led, BC_LED_MODE_OFF);
+
     bc_module_power_init();
 
     bc_led_strip_init(&led_strip, bc_module_power_get_led_strip_driver(), &led_strip_buffer);
@@ -48,8 +55,10 @@ void application_init(void)
 
     usb_talk_init();
 
-    usb_talk_sub(PREFIX_TALK "/relay/-/set", relay_set);
-    usb_talk_sub(PREFIX_TALK "/relay/-/get", relay_get);
+    usb_talk_sub(PREFIX_TALK "/relay/-/state/set", relay_state_set);
+    usb_talk_sub(PREFIX_TALK "/relay/-/state/get", relay_state_get);
+    usb_talk_sub(PREFIX_TALK "/led/-/state/set", led_state_set);
+    usb_talk_sub(PREFIX_TALK "/led/-/state/get", led_state_get);
 }
 
 void climate_event_event_handler(bc_module_climate_event_t event, void *event_param)
@@ -152,6 +161,8 @@ static void temperature_tag_event_handler(bc_tag_temperature_t *self, bc_tag_tem
 
 static void thermometer(float temperature)
 {
+    temperature = 25;
+
     temperature -= -20;
 
     int max_i = PIXEL_COUNT * temperature / (50 + 20);
@@ -221,11 +232,11 @@ static void get_heat_map_color(float value, float *red, float *green, float *blu
     *blue  = (color[idx2][2] - color[idx1][2]) * fractBetween + color[idx1][2];
 }
 
-static void relay_set(usb_talk_payload_t *payload)
+static void relay_state_set(usb_talk_payload_t *payload)
 {
     bool state;
 
-    if (!usb_talk_payload_get_bool(payload, "state", &state))
+    if (!usb_talk_payload_get_bool(payload, &state))
     {
         return;
     }
@@ -235,11 +246,30 @@ static void relay_set(usb_talk_payload_t *payload)
     usb_talk_publish_relay(PREFIX_TALK, &state);
 }
 
-static void relay_get(usb_talk_payload_t *payload)
+static void relay_state_get(usb_talk_payload_t *payload)
 {
     (void) payload;
 
     bool state = bc_module_power_relay_get_state();
 
     usb_talk_publish_relay(PREFIX_TALK, &state);
+}
+
+static void led_state_set(usb_talk_payload_t *payload)
+{
+    if (!usb_talk_payload_get_bool(payload, &led_state))
+    {
+        return;
+    }
+
+    bc_led_set_mode(&led, led_state ? BC_LED_MODE_ON : BC_LED_MODE_OFF);
+
+    usb_talk_publish_led(PREFIX_TALK, &led_state);
+}
+
+static void led_state_get(usb_talk_payload_t *payload)
+{
+    (void) payload;
+
+    usb_talk_publish_led(PREFIX_TALK, &led_state);
 }
