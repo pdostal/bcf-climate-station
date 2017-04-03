@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu -o xtrace
 
-rm -r out_release
+rm -rf out_release
 mkdir out_release
 
 make release PIXEL_COUNT=72
