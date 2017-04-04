@@ -110,7 +110,7 @@
             {
               "dsType": "influxdb",
               "groupBy": [],
-              "measurement": "weather-station-thermometer-i2c0-49.temperature",
+              "measurement": "climate-station.thermometer.0:1.temperature",
               "policy": "default",
               "query": "SELECT \"value\" FROM \"meteostanice-thermometer-i2c0-48.temperature\" WHERE $timeFilter",
               "rawQuery": false,
@@ -202,7 +202,7 @@
             {
               "dsType": "influxdb",
               "groupBy": [],
-              "measurement": "weather-station-humidity-sensor-i2c0-40.relative-humidity",
+              "measurement": "climate-station.hygrometer.0:2.relative-humidity",
               "policy": "default",
               "query": "SELECT \"value\" FROM \"meteostanice-humidity-sensor-i2c0-40.relative-humidity\" WHERE $timeFilter",
               "rawQuery": false,
@@ -272,7 +272,7 @@
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
-          "postfix": "",
+          "postfix": " lux",
           "postfixFontSize": "50%",
           "prefix": "",
           "prefixFontSize": "50%",
@@ -294,7 +294,7 @@
             {
               "dsType": "influxdb",
               "groupBy": [],
-              "measurement": "weather-station-lux-meter-i2c0-44.illuminance",
+              "measurement": "climate-station.lux-meter.0:0.illuminance",
               "policy": "default",
               "query": "SELECT \"value\" FROM \"bridge-0-humidity-sensor-i2c0-5f.relative-humidity\" WHERE $timeFilter",
               "refId": "A",
@@ -333,7 +333,7 @@
           "colors": [
             "rgba(240, 242, 9, 0.9)",
             "rgba(40, 69, 237, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "rgba(45, 80, 172, 0.97)"
           ],
           "datasource": "${DS_NODE}",
           "decimals": 2,
@@ -341,8 +341,8 @@
           "error": false,
           "format": "none",
           "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
+            "maxValue": 1100,
+            "minValue": 900,
             "show": true,
             "thresholdLabels": false,
             "thresholdMarkers": true
@@ -387,9 +387,9 @@
               "dsType": "influxdb",
               "groupBy": [],
               "hide": false,
-              "measurement": "weather-station-barometer-i2c0-60.pressure",
+              "measurement": "climate-station.barometer.0:0.pressure",
               "policy": "default",
-              "query": "SELECT \"value\"/100 FROM \"weather-station-barometer-i2c0-60.pressure\" WHERE $timeFilter",
+              "query": "SELECT \"value\"/100 FROM \"climate-station.barometer.0:0.pressure\" WHERE $timeFilter",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
@@ -481,7 +481,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "weather-station-thermometer-i2c0-49.temperature",
+              "measurement": "climate-station.thermometer.0:1.temperature",
               "policy": "default",
               "query": "SELECT mean(\"value\") FROM \"meteostanice-thermometer-i2c0-48.temperature\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
               "rawQuery": false,
@@ -586,7 +586,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "weather-station-humidity-sensor-i2c0-40.relative-humidity",
+              "measurement": "climate-station.hygrometer.0:2.relative-humidity",
               "policy": "default",
               "query": "SELECT mean(\"value\") FROM \"meteostanice-humidity-sensor-i2c0-40.relative-humidity\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
               "rawQuery": false,
@@ -692,7 +692,7 @@
                 }
               ],
               "hide": false,
-              "measurement": "weather-station-lux-meter-i2c0-44.illuminance",
+              "measurement": "climate-station.lux-meter.0:0.illuminance",
               "policy": "default",
               "query": "SELECT \"value\" FROM \"bridge-0-humidity-sensor-i2c0-5f.relative-humidity\" WHERE $timeFilter",
               "rawQuery": false,
@@ -718,7 +718,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Illuminance",
+          "title": "Illuminance [lux]",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -795,10 +795,10 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "weather-station-barometer-i2c0-60.pressure",
+              "measurement": "climate-station.barometer.0:0.pressure",
               "policy": "default",
-              "query": "SELECT mean(\"value\")/100 FROM \"meteostanice-barometer-i2c0-60.pressure\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": false,
+              "query": "SELECT mean(\"value\")/100 FROM \"climate-station.barometer.0:0.pressure\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+              "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -821,7 +821,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Pressure",
+          "title": "Pressure [hPa]",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -892,6 +892,6 @@
     ]
   },
   "timezone": "browser",
-  "title": "Weather station",
-  "version": 3
+  "title": "Climate station",
+  "version": 2
 }
