@@ -28,20 +28,25 @@ def mgtt_on_message(client, userdata, msg):
     if not payload:
         return
 
-    if not isinstance(payload, dict):
-        return
-
     topic = msg.topic.split('/')
-
     now = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    for k, v in payload.items():
-        json_body = [{'measurement': '-'.join(topic[1:]) + '.' + k,
+    if isinstance(payload, float):
+        json_body = [{'measurement': '.'.join(topic[1:]),
                       'time': now,
                       'tags': {},
-                      'fields': {'value': v[0] if isinstance(v, list) else v}}]
+                      'fields': {'value': payload}}]
+        print(json_body)
+        return
 
-        userdata['influx'].write_points(json_body)
+    elif not isinstance(payload, dict):
+        for k, v in payload.items():
+            value = v[0] if isinstance(v, list) else v
+            json_body = [{'measurement': '.'.join(topic[1:]) + '.' + k,
+                          'time': now,
+                          'tags': {},
+                          'fields': {'value': value}}]
+            userdata['influx'].write_points(json_body)
 
 
 def main():
