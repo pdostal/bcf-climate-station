@@ -31,15 +31,7 @@ def mgtt_on_message(client, userdata, msg):
     topic = msg.topic.split('/')
     now = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    if isinstance(payload, float):
-        json_body = [{'measurement': '.'.join(topic[1:]),
-                      'time': now,
-                      'tags': {},
-                      'fields': {'value': payload}}]
-        print(json_body)
-        return
-
-    elif not isinstance(payload, dict):
+    if isinstance(payload, dict):
         for k, v in payload.items():
             value = v[0] if isinstance(v, list) else v
             json_body = [{'measurement': '.'.join(topic[1:]) + '.' + k,
@@ -47,6 +39,12 @@ def mgtt_on_message(client, userdata, msg):
                           'tags': {},
                           'fields': {'value': value}}]
             userdata['influx'].write_points(json_body)
+    else:
+        json_body = [{'measurement': '.'.join(topic[1:]),
+                      'time': now,
+                      'tags': {},
+                      'fields': {'value': payload}}]
+        userdata['influx'].write_points(json_body)
 
 
 def main():
