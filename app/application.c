@@ -161,8 +161,6 @@ static void temperature_tag_event_handler(bc_tag_temperature_t *self, bc_tag_tem
 
 static void thermometer(float temperature)
 {
-    temperature = 25;
-
     temperature -= -20;
 
     int max_i = PIXEL_COUNT * temperature / (50 + 20);
