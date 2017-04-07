@@ -25,13 +25,13 @@ def mgtt_on_message(client, userdata, msg):
     except Exception as e:
         return
 
-    if not payload:
-        return
-
     topic = msg.topic.split('/')
     now = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    if isinstance(payload, dict):
+    if isinstance(payload, str):
+        return
+
+    elif isinstance(payload, dict):
         for k, v in payload.items():
             value = v[0] if isinstance(v, list) else v
             json_body = [{'measurement': '.'.join(topic[1:]) + '.' + k,
@@ -39,6 +39,7 @@ def mgtt_on_message(client, userdata, msg):
                           'tags': {},
                           'fields': {'value': value}}]
             userdata['influx'].write_points(json_body)
+
     else:
         json_body = [{'measurement': '.'.join(topic[1:]),
                       'time': now,
