@@ -1,5 +1,5 @@
 #include <application.h>
-#include <bcl.h>
+#include <usb_talk.h>
 
 #ifndef PIXEL_COUNT
 #define PIXEL_COUNT 72
