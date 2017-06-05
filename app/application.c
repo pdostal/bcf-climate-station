@@ -102,7 +102,7 @@ void climate_event_event_handler(bc_module_climate_event_t event, void *event_pa
             break;
 
         case BC_MODULE_CLIMATE_EVENT_UPDATE_LUX_METER:
-            if (bc_module_climate_get_luminosity_lux(&value))
+            if (bc_module_climate_get_illuminance_lux(&value))
             {
                 usb_talk_publish_lux_meter(PREFIX_TALK, &i2c_lux_meter, &value);
                 illuminance = value;
