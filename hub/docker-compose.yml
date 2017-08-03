@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+    mqtt_to_influxdb:
+        build: .
+        restart: always
+

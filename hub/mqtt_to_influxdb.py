@@ -11,11 +11,20 @@ from influxdb import InfluxDBClient
 
 LOG_FORMAT = '%(asctime)s %(levelname)s: %(message)s'
 
+if os.path.isfile("mqtt_to_influxdb_conf.py"):
+    from mqtt_to_influxdb_conf import *
+else:
+    MQTT_HOSTNAME = "localhost"
+    MQTT_PORT = 1883
+    MQTT_TOPICS = ["node/#", "nodes/#"]
+    INFLUX_HOSTNAME = "localhost"
+    INFLUX_PORT = 8086
+    INFLUX_TOPIC = "node"
 
 def mgtt_on_connect(client, userdata, flags, rc):
     log.info('Connected to MQTT broker with (code %s)', rc)
 
-    for topic in ('nodes/#', 'node/#'):
+    for topic in MQTT_TOPICS:
         client.subscribe(topic)
 
 
@@ -51,13 +60,13 @@ def mgtt_on_message(client, userdata, msg):
 def main():
     log.basicConfig(level=INFO, format=LOG_FORMAT)
 
-    client = InfluxDBClient('localhost', 8086, 'root', 'root', 'node')
+    client = InfluxDBClient(INFLUX_HOSTNAME, INFLUX_PORT, 'root', 'root', INFLUX_TOPIC)
 
     mqttc = mqtt.Client(userdata={'influx': client})
     mqttc.on_connect = mgtt_on_connect
     mqttc.on_message = mgtt_on_message
 
-    mqttc.connect('localhost', 1883, keepalive=10)
+    mqttc.connect(MQTT_HOSTNAME, MQTT_PORT, keepalive=10)
     mqttc.loop_forever()
 
 

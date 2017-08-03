@@ -1,0 +1,7 @@
+MQTT_HOSTNAME = "localhost"
+MQTT_PORT = 1883
+MQTT_TOPICS = ["node/#", "nodes/#"]
+INFLUX_HOSTNAME = "localhost"
+INFLUX_PORT = 8086
+INFLUX_TOPIC = "node"
+

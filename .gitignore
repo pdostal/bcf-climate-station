@@ -6,3 +6,4 @@ base/obj/
 base/out/
 remote/obj/
 remote/out/
+hub/mqtt_to_influxdb_conf.py
