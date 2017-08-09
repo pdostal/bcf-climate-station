@@ -26,6 +26,7 @@ def mgtt_on_connect(client, userdata, flags, rc):
 
     for topic in MQTT_TOPICS:
         client.subscribe(topic)
+        log.info('Subscribed to %s topic', topic)
 
 
 def mgtt_on_message(client, userdata, msg):

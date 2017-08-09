@@ -1,7 +1,8 @@
 version: '3'
 
 services:
-    mqtt_to_influxdb:
-        build: .
-        restart: always
+  mqtt_to_influxdb:
+    build: .
+    network_mode: bridge
+    restart: always
 
